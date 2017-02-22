@@ -535,12 +535,12 @@ namespace Microsoft.Diagnostics.Runtime.Utilities
 
         private static string GetIndexPath(string fileName, int buildTimeStamp, int imageSize)
         {
-            return fileName + @"\" + buildTimeStamp.ToString("x") + imageSize.ToString("x") + @"\" + fileName;
+            return (fileName + @"\" + buildTimeStamp.ToString("x") + imageSize.ToString("x") + @"\" + fileName).ToLower();
         }
 
         private static string GetIndexPath(string pdbSimpleName, Guid pdbIndexGuid, int pdbIndexAge)
         {
-            return pdbSimpleName + @"\" + pdbIndexGuid.ToString().Replace("-", "") + pdbIndexAge.ToString("x") + @"\" + pdbSimpleName;
+            return (pdbSimpleName + @"\" + pdbIndexGuid.ToString().Replace("-", "") + pdbIndexAge.ToString("x") + @"\" + pdbSimpleName).ToLower();
         }
 
         private string TryGetFileFromServer(string urlForServer, string fileIndexPath, string cache)
@@ -615,9 +615,10 @@ namespace Microsoft.Diagnostics.Runtime.Utilities
             if (File.Exists(fullDestPath))
                 return fullDestPath;
 
-            if (serverPath.StartsWith("http:"))
+            if (serverPath.StartsWith("http:") || serverPath.StartsWith("https:"))
             {
                 var fullUri = serverPath + "/" + pdbIndexPath.Replace('\\', '/');
+                Trace("Trying to download {0}", fullUri);
                 try
                 {
                     var req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(fullUri);
