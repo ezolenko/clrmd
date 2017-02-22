@@ -472,11 +472,6 @@ namespace Microsoft.Diagnostics.Runtime.Utilities
             }
         }
 
-        private static bool IsHttp(string server)
-        {
-            return server.StartsWith("http:", StringComparison.CurrentCultureIgnoreCase) || server.StartsWith("https:", StringComparison.CurrentCultureIgnoreCase);
-        }
-
         /// <summary>
         /// Clear missing file/pdb cache
         /// </summary>

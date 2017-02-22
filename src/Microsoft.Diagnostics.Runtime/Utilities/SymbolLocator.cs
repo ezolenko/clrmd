@@ -606,6 +606,14 @@ namespace Microsoft.Diagnostics.Runtime.Utilities
             return null;
         }
 
+        /// <summary>
+        /// Checks if server path starts with http/https
+        /// </summary>
+        protected static bool IsHttp(string server)
+        {
+            return server.StartsWith("http:", StringComparison.CurrentCultureIgnoreCase) || server.StartsWith("https:", StringComparison.CurrentCultureIgnoreCase);
+        }
+
         private string GetPhysicalFileFromServer(string serverPath, string pdbIndexPath, string symbolCacheDir, bool returnContents = false)
         {
             if (string.IsNullOrEmpty(serverPath))
@@ -615,7 +623,7 @@ namespace Microsoft.Diagnostics.Runtime.Utilities
             if (File.Exists(fullDestPath))
                 return fullDestPath;
 
-            if (serverPath.StartsWith("http:") || serverPath.StartsWith("https:"))
+            if (IsHttp(serverPath))
             {
                 var fullUri = serverPath + "/" + pdbIndexPath.Replace('\\', '/');
                 Trace("Trying to download {0}", fullUri);
