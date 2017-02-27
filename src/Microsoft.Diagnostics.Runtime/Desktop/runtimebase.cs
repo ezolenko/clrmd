@@ -621,6 +621,9 @@ namespace Microsoft.Diagnostics.Runtime.Desktop
         protected ClrThread GetThreadByStackAddress(ulong address)
         {
             Debug.Assert(address != 0);
+            if (_threads == null)
+                InitThreads();
+
             foreach (ClrThread thread in _threads)
             {
                 ulong min = thread.StackBase;
@@ -1006,6 +1009,7 @@ namespace Microsoft.Diagnostics.Runtime.Desktop
         internal abstract IEnumerable<NativeWorkItem> EnumerateWorkItems();
         internal abstract uint GetStringFirstCharOffset();
         internal abstract uint GetStringLengthOffset();
+        internal abstract ulong GetILForModule(ClrModule module, uint rva);
         #endregion
 
 
